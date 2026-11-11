@@ -1,0 +1,32 @@
+<% content_for :title, "ปฏิทินประมูล | Auction Roof" %>
+<% thai_months = %w[มกราคม กุมภาพันธ์ มีนาคม เมษายน พฤษภาคม มิถุนายน กรกฎาคม สิงหาคม กันยายน ตุลาคม พฤศจิกายน ธันวาคม] %>
+
+<header class="page-head">
+  <h1>ปฏิทินรอบประมูล</h1>
+  <nav class="page-tools" aria-label="เลือกเดือน">
+    <%= link_to "◁", calendar_auctions_path(month: @month.prev_month.strftime("%Y-%m")), class: "btn btn-small btn-ghost", "aria-label": "เดือนก่อน" %>
+    <strong class="cal-month"><%= thai_months[@month.month - 1] %> <%= @month.year + 543 %></strong>
+    <%= link_to "▷", calendar_auctions_path(month: @month.next_month.strftime("%Y-%m")), class: "btn btn-small btn-ghost", "aria-label": "เดือนถัดไป" %>
+    <%= link_to "วันนี้", calendar_auctions_path, class: "btn btn-small btn-ghost" %>
+  </nav>
+</header>
+
+<div class="cal" role="table" aria-label="ปฏิทิน">
+  <div class="cal__row cal__head" role="row">
+    <% %w[อา จ อ พ พฤ ศ ส].each do |d| %><div role="columnheader"><%= d %></div><% end %>
+  </div>
+  <% (@month.beginning_of_week(:sunday)..@month.end_of_month.end_of_week(:sunday)).each_slice(7) do |week| %>
+    <div class="cal__row" role="row">
+      <% week.each do |day| %>
+        <div role="cell" class="cal__day <%= "is-out" if day.month != @month.month %> <%= "is-today" if day == Date.current %>">
+          <span class="cal__num"><%= day.day %></span>
+          <% (@auctions_by_day[day] || []).each do |auction| %>
+            <%= link_to auction_path(auction), class: "cal__item cal__item--#{auction.phase}" do %>
+              <time><%= auction.starts_at.in_time_zone.strftime("%H:%M") %></time> <%= auction.title %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

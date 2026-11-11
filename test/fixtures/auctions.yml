@@ -1,0 +1,38 @@
+live:
+  seller: three
+  title: หม้อแปลงไฟฟ้า 50kVA
+  description: สภาพใช้งานได้
+  starting_price: 10000
+  min_increment: 500
+  starts_at: <%= 1.hour.ago.to_fs(:db) %>
+  ends_at: <%= 1.day.from_now.to_fs(:db) %>
+  status: published
+
+upcoming:
+  seller: three
+  title: รถกระบะ
+  starting_price: 200000
+  min_increment: 1000
+  starts_at: <%= 1.day.from_now.to_fs(:db) %>
+  ends_at: <%= 2.days.from_now.to_fs(:db) %>
+  status: published
+
+draft:
+  seller: three
+  title: สายไฟ (ร่าง)
+  starting_price: 1000
+  min_increment: 100
+  starts_at: <%= 1.day.from_now.to_fs(:db) %>
+  ends_at: <%= 2.days.from_now.to_fs(:db) %>
+  status: draft
+
+expired:
+  seller: three
+  title: เครื่องจักรเก่า
+  starting_price: 5000
+  min_increment: 100
+  current_price: 5200
+  bids_count: 2
+  starts_at: <%= 2.days.ago.to_fs(:db) %>
+  ends_at: <%= 1.minute.ago.to_fs(:db) %>
+  status: published

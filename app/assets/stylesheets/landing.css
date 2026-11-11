@@ -462,7 +462,7 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .nav-links a:not(.btn) {
+  .nav-links .nav-hide-sm {
     display: none;
   }
 }

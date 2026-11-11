@@ -1,0 +1,21 @@
+en:
+  activerecord:
+    attributes:
+      auction:
+        title: "ชื่อรายการ"
+        description: "รายละเอียด"
+        starting_price: "ราคาเริ่มต้น"
+        min_increment: "ขั้นต่ำการเพิ่มราคา"
+        starts_at: "เวลาเริ่ม"
+        ends_at: "เวลาปิด"
+        photos: "รูปภาพ"
+      bid:
+        amount: "ราคาที่เสนอ"
+      chat_message:
+        body: "ข้อความ"
+    errors:
+      models:
+        bid:
+          attributes:
+            amount:
+              not_a_number: "ต้องเป็นตัวเลข"

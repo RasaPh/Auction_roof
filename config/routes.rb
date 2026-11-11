@@ -3,7 +3,24 @@ Rails.application.routes.draw do
   resource :registration, only: %i[ new create ]
   resource :password_reset, only: %i[ new create edit update ]
 
+  resources :auctions, except: :destroy do
+    get :calendar, on: :collection
+    resources :bids, only: :create
+    resources :chat_messages, only: %i[ create destroy ]
+  end
+  resources :notifications, only: :index do
+    patch :read, on: :member
+    post :read_all, on: :collection
+  end
+
   namespace :admin do
+    resources :auctions, only: :index do
+      member do
+        post :close
+        post :cancel
+      end
+    end
+    get "reports", to: "reports#index"
     resources :users, only: %i[ index show new create edit update ]
     resources :roles, only: %i[ index create edit update destroy ]
   end
@@ -13,6 +30,9 @@ Rails.application.routes.draw do
       post "user", to: "users#create"
       get "me", to: "users#me"
       resource :session, only: %i[ create destroy ]
+      resources :auctions, only: %i[ index show ] do
+        resources :bids, only: :create
+      end
     end
   end
 

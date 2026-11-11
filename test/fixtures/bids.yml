@@ -1,0 +1,11 @@
+expired_low:
+  auction: expired
+  user: one
+  amount: 5000
+  created_at: <%= 1.day.ago.to_fs(:db) %>
+
+expired_high:
+  auction: expired
+  user: two
+  amount: 5200
+  created_at: <%= 12.hours.ago.to_fs(:db) %>

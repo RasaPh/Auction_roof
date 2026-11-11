@@ -1,0 +1,7 @@
+<li class="chat-msg" id="<%= dom_id(chat_message) %>">
+  <span class="chat-msg__who"><%= mask_name(chat_message.user) %></span>
+  <span class="chat-msg__body"><%= chat_message.body %></span>
+  <%# Shown only to moderators via the .can-moderate class; the server checks permission too. %>
+  <%= button_to "ลบ", auction_chat_message_path(chat_message.auction_id, chat_message), method: :delete,
+        class: "link-danger chat-msg__del", form_class: "chat-msg__del-form", data: { turbo_confirm: "ลบข้อความนี้?" } %>
+</li>

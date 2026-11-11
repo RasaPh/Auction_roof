@@ -1,0 +1,5 @@
+<div id="<%= dom_id(auction, :card_price) %>" class="card-price">
+  <small><%= auction.bids_count.zero? ? "ราคาเริ่มต้น" : "ราคาปัจจุบัน" %></small>
+  <strong><%= baht(auction.price) %></strong>
+  <small><%= auction.bids_count %> ครั้ง</small>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_11_100001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_11_120002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,62 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_100001) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "auctions", force: :cascade do |t|
+    t.bigint "seller_id", null: false
+    t.string "title", null: false
+    t.text "description"
+    t.decimal "starting_price", precision: 14, scale: 2, null: false
+    t.decimal "min_increment", precision: 14, scale: 2, null: false
+    t.decimal "current_price", precision: 14, scale: 2
+    t.integer "bids_count", default: 0, null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at", null: false
+    t.string "status", default: "draft", null: false
+    t.bigint "winner_id"
+    t.datetime "closed_at"
+    t.datetime "ending_soon_notified_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["seller_id"], name: "index_auctions_on_seller_id"
+    t.index ["starts_at"], name: "index_auctions_on_starts_at"
+    t.index ["status", "ends_at"], name: "index_auctions_on_status_and_ends_at"
+    t.index ["winner_id"], name: "index_auctions_on_winner_id"
+  end
+
+  create_table "bids", force: :cascade do |t|
+    t.bigint "auction_id", null: false
+    t.bigint "user_id", null: false
+    t.decimal "amount", precision: 14, scale: 2, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auction_id", "amount"], name: "index_bids_on_auction_id_and_amount"
+    t.index ["auction_id"], name: "index_bids_on_auction_id"
+    t.index ["user_id"], name: "index_bids_on_user_id"
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.bigint "auction_id", null: false
+    t.bigint "user_id", null: false
+    t.string "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auction_id"], name: "index_chat_messages_on_auction_id"
+    t.index ["user_id"], name: "index_chat_messages_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "auction_id"
+    t.string "kind", null: false
+    t.string "message", null: false
+    t.datetime "read_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["auction_id"], name: "index_notifications_on_auction_id"
+    t.index ["user_id", "read_at"], name: "index_notifications_on_user_id_and_read_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -79,6 +135,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_100001) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "auctions", "users", column: "seller_id"
+  add_foreign_key "auctions", "users", column: "winner_id"
+  add_foreign_key "bids", "auctions"
+  add_foreign_key "bids", "users"
+  add_foreign_key "chat_messages", "auctions"
+  add_foreign_key "chat_messages", "users"
+  add_foreign_key "notifications", "auctions"
+  add_foreign_key "notifications", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "users", "roles"
 end

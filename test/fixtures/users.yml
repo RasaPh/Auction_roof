@@ -16,3 +16,11 @@ two:
   phone: "0822222222"
   role: buyer
   password_digest: <%= password_digest %>
+
+three:
+  username: three
+  first_name: Three
+  last_name: Seller
+  phone: "0833333334"
+  role: seller
+  password_digest: <%= password_digest %>

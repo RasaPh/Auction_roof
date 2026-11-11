@@ -1,0 +1,10 @@
+<div id="chat_form">
+  <% if Current.user %>
+    <%= form_with model: [ auction, ChatMessage.new ], class: "chat-form" do |form| %>
+      <%= form.text_field :body, maxlength: 500, required: true, autocomplete: "off", placeholder: "พิมพ์ข้อความ...", "aria-label": "ข้อความแชท" %>
+      <%= form.submit "ส่ง", class: "btn btn-small" %>
+    <% end %>
+  <% else %>
+    <p class="muted"><%= link_to "เข้าสู่ระบบ", new_session_path %> เพื่อร่วมแชท</p>
+  <% end %>
+</div>

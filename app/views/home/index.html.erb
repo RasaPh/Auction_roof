@@ -2,26 +2,7 @@
 <% content_for :title, "Auction Roof — ประมูลออนไลน์ที่ง่ายและโปร่งใส" %>
 
 <div class="landing">
-  <header class="site-header">
-    <div class="container nav">
-      <a href="<%= root_path %>" class="brand">
-        <span class="brand-mark">AR</span>
-        Auction Roof
-      </a>
-      <nav class="nav-links">
-        <a href="#features">จุดเด่น</a>
-        <a href="#how">วิธีใช้งาน</a>
-        <% if (user = Current.user) %>
-          <span class="nav-user">สวัสดี <%= user.first_name %></span>
-          <% if can?(:manage_users) %><%= link_to "จัดการผู้ใช้", admin_users_path %><% end %>
-          <%= button_to "ออกจากระบบ", session_path, method: :delete, class: "btn btn-small btn-ghost", form_class: "nav-form" %>
-        <% else %>
-          <%= link_to "เข้าสู่ระบบ", new_session_path %>
-          <%= link_to "สมัครสมาชิก", new_registration_path, class: "btn btn-small" %>
-        <% end %>
-      </nav>
-    </div>
-  </header>
+  <%= render "layouts/site_header", home: true %>
 
   <main>
     <% if flash.any? %>
@@ -38,7 +19,7 @@
             ทั้งผู้ขายและผู้ซื้อเห็นทุกความเคลื่อนไหวอย่างชัดเจน
           </p>
           <div class="hero-actions">
-            <%= link_to "เริ่มประมูลเลย", Current.user ? "#start" : new_registration_path, class: "btn" %>
+            <%= link_to "เริ่มประมูลเลย", Current.user ? auctions_path : new_registration_path, class: "btn" %>
             <a href="#how" class="btn btn-ghost">ดูวิธีใช้งาน</a>
           </div>
         </div>
@@ -119,7 +100,8 @@
       <div class="container">
         <div class="cta">
           <h2>พร้อมเริ่มประมูลแล้วหรือยัง?</h2>
-          <p>เปิดประมูลรายการแรกของคุณได้เร็ว ๆ นี้</p>
+          <p>ดูรายการที่กำลังประมูลอยู่ หรือเปิดประมูลรายการแรกของคุณ</p>
+          <%= link_to "ดูรายการประมูล", auctions_path, class: "btn btn-light" %>
           <% unless Current.user %>
             <%= link_to "สมัครสมาชิก", new_registration_path, class: "btn btn-light" %>
           <% end %>

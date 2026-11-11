@@ -1,0 +1,82 @@
+<% content_for :title, "#{@auction.title} | Auction Roof" %>
+<%= turbo_stream_from @auction %>
+<%= turbo_stream_from @auction, :chat %>
+
+<p class="crumbs"><%= link_to "← รายการประมูล", auctions_path %></p>
+
+<div class="room">
+  <div class="room__main">
+    <section class="gallery" data-controller="gallery">
+      <% if @auction.photos.attached? %>
+        <div class="gallery__stage">
+          <%= image_tag rails_blob_path(@auction.photos.first, disposition: "inline"), alt: @auction.title, data: { gallery_target: "stage" } %>
+        </div>
+        <% if @auction.photos.size > 1 %>
+          <div class="gallery__thumbs">
+            <% @auction.photos.each_with_index do |photo, i| %>
+              <button type="button" class="<%= "is-active" if i.zero? %>" data-action="gallery#show" data-gallery-target="thumb" data-src="<%= rails_blob_path(photo, disposition: "inline") %>" aria-label="รูปที่ <%= i + 1 %>">
+                <%= image_tag rails_blob_path(photo, disposition: "inline"), alt: "", loading: "lazy" %>
+              </button>
+            <% end %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="gallery__stage"><div class="cover-placeholder">ไม่มีรูป</div></div>
+      <% end %>
+    </section>
+
+    <header class="room__head">
+      <h1><%= @auction.title %></h1>
+      <p class="muted">ผู้ขาย: <%= @auction.seller.full_name %></p>
+      <% if @auction.editable_by?(Current.user) %>
+        <div class="room__actions">
+          <%= link_to "แก้ไข", edit_auction_path(@auction), class: "btn btn-small btn-ghost" %>
+        </div>
+      <% end %>
+    </header>
+
+    <% if @auction.description.present? %>
+      <section class="panel prose"><%= simple_format(@auction.description) %></section>
+    <% end %>
+  </div>
+
+  <aside class="room__side">
+    <%= render "auctions/price", auction: @auction %>
+
+    <% if @auction.biddable? %>
+      <section class="panel bid-box">
+        <% if !Current.user %>
+          <p><%= link_to "เข้าสู่ระบบ", new_session_path %> เพื่อเสนอราคา</p>
+        <% elsif Current.user == @auction.seller %>
+          <p class="muted">นี่คือรายการของคุณ จึงเสนอราคาเองไม่ได้</p>
+        <% elsif !can?(:place_bids) %>
+          <p class="muted">บัญชีของคุณยังไม่มีสิทธิ์เสนอราคา</p>
+        <% else %>
+          <%= form_with model: [ @auction, @bid ], class: "bid-form" do |form| %>
+            <%= form.label :amount, "ราคาที่เสนอ (บาท)" %>
+            <div class="bid-form__row">
+              <%= form.number_field :amount, min: @auction.minimum_bid.to_i, step: "any", required: true, inputmode: "decimal" %>
+              <%= form.submit "เสนอราคา", class: "btn", data: { turbo_confirm: "ยืนยันการเสนอราคา?" } %>
+            </div>
+          <% end %>
+        <% end %>
+      </section>
+    <% end %>
+
+    <section class="panel">
+      <h2 class="panel__title">ประวัติการเสนอราคา</h2>
+      <ol id="<%= dom_id(@auction, :bids) %>" class="bid-list-live">
+        <%= render partial: "bids/bid", collection: @bids, as: :bid %>
+      </ol>
+      <% if @bids.empty? %><p class="muted bid-empty">ยังไม่มีผู้เสนอราคา</p><% end %>
+    </section>
+
+    <section class="panel chat" data-controller="chat">
+      <h2 class="panel__title">แชทห้องประมูล <span class="live-dot" aria-hidden="true"></span></h2>
+      <ul id="<%= dom_id(@auction, :chat_messages) %>" class="chat-list" data-chat-target="list">
+        <%= render partial: "chat_messages/chat_message", collection: @chat_messages, as: :chat_message %>
+      </ul>
+      <%= render "chat_messages/form", auction: @auction %>
+    </section>
+  </aside>
+</div>

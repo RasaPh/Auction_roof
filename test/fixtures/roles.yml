@@ -5,3 +5,7 @@ admin:
 buyer:
   name: Buyer
   permissions: ["place_bids"]
+
+seller:
+  name: Auction Seller
+  permissions: ["create_auctions", "place_bids"]

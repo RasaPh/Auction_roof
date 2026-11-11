@@ -1,0 +1,32 @@
+<%# Shared top bar for the public site. Pass home: true on the landing page to keep its in-page anchors. %>
+<% home = local_assigns.fetch(:home, false) %>
+<header class="site-header">
+  <div class="container nav">
+    <a href="<%= root_path %>" class="brand">
+      <span class="brand-mark">AR</span>
+      Auction Roof
+    </a>
+    <nav class="nav-links">
+      <% if home %>
+        <a href="#features" class="nav-hide-sm">จุดเด่น</a>
+        <a href="#how" class="nav-hide-sm">วิธีใช้งาน</a>
+      <% end %>
+      <%= link_to "รายการประมูล", auctions_path %>
+      <%= link_to "ปฏิทิน", calendar_auctions_path, class: "nav-hide-sm" %>
+      <% if (user = Current.user) %>
+        <% if can?(:create_auctions) %><%= link_to "รายการของฉัน", auctions_path(tab: "mine"), class: "nav-hide-sm" %><% end %>
+        <% admin_path = [ [ :manage_auctions, admin_auctions_path ], [ :view_reports, admin_reports_path ], [ :manage_users, admin_users_path ], [ :manage_roles, admin_roles_path ] ].find { can?(it.first) }&.last %>
+        <% if admin_path %><%= link_to "ระบบจัดการ", admin_path, class: "nav-hide-sm" %><% end %>
+        <%= turbo_stream_from user, :notifications %>
+        <%= link_to notifications_path, class: "bell", "aria-label": "การแจ้งเตือน" do %>
+          🔔<%= render "notifications/badge", count: user.notifications.unread.count %>
+        <% end %>
+        <span class="nav-user nav-hide-sm">สวัสดี <%= user.first_name %></span>
+        <%= button_to "ออกจากระบบ", session_path, method: :delete, class: "btn btn-small btn-ghost", form_class: "nav-form" %>
+      <% else %>
+        <%= link_to "เข้าสู่ระบบ", new_session_path %>
+        <%= link_to "สมัครสมาชิก", new_registration_path, class: "btn btn-small" %>
+      <% end %>
+    </nav>
+  </div>
+</header>

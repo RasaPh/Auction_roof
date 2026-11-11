@@ -1,0 +1,20 @@
+<% content_for :title, "การแจ้งเตือน | Auction Roof" %>
+<header class="page-head">
+  <h1>การแจ้งเตือน</h1>
+  <% if @notifications.any? { !it.read? } %>
+    <%= button_to "อ่านทั้งหมด", read_all_notifications_path, class: "btn btn-small btn-ghost" %>
+  <% end %>
+</header>
+
+<ul class="notif-list panel">
+  <% @notifications.each do |n| %>
+    <li class="notif <%= "is-unread" unless n.read? %>">
+      <%= button_to read_notification_path(n), method: :patch, class: "notif__btn" do %>
+        <span class="notif__icon" aria-hidden="true"><%= { "outbid" => "⚠️", "ending_soon" => "⏰", "won" => "🏆", "sold" => "💰", "unsold" => "📦" }[n.kind] %></span>
+        <span class="notif__msg"><%= n.message %></span>
+        <time class="muted"><%= thai_datetime(n.created_at) %></time>
+      <% end %>
+    </li>
+  <% end %>
+  <% if @notifications.empty? %><li class="empty">ยังไม่มีการแจ้งเตือน</li><% end %>
+</ul>

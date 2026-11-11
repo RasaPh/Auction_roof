@@ -1,0 +1,11 @@
+<% content_for :full_page, true %>
+<% content_for :body_html do %>
+<div class="site <%= "can-moderate" if can?(:manage_auctions) %>">
+  <%= render "layouts/site_header" %>
+  <main class="container site-main">
+    <%= render "layouts/flash" %>
+    <%= yield %>
+  </main>
+</div>
+<% end %>
+<%= render template: "layouts/application" %>
