@@ -1,0 +1,36 @@
+<% content_for :title, "รายการประมูล | Auction Roof" %>
+<%= turbo_stream_from :auctions %>
+
+<header class="page-head">
+  <h1>รายการประมูล</h1>
+  <div class="page-tools">
+    <%= form_with url: auctions_path, method: :get, class: "search", role: "search" do |form| %>
+      <%= hidden_field_tag :tab, @tab, id: nil %>
+      <%= form.search_field :q, value: @query, placeholder: "ค้นหาชื่อรายการ", "aria-label": "ค้นหารายการประมูล" %>
+    <% end %>
+    <% if can?(:create_auctions) %><%= link_to "+ ลงประมูล", new_auction_path, class: "btn btn-small" %><% end %>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="ประเภทรายการ">
+  <% { "live" => "กำลังประมูล", "upcoming" => "เร็ว ๆ นี้", "ended" => "ปิดแล้ว" }.merge(can?(:create_auctions) ? { "mine" => "รายการของฉัน" } : {}).each do |tab, label| %>
+    <%= link_to label, auctions_path(tab: tab, q: @query.presence), class: ("is-active" if @tab == tab), "aria-current": ("page" if @tab == tab) %>
+  <% end %>
+</nav>
+
+<% if @auctions.any? %>
+  <div class="a-grid"><%= render @auctions %></div>
+  <% pages = (@total / AuctionsController::PER_PAGE.to_f).ceil %>
+  <% if pages > 1 %>
+    <nav class="pager" aria-label="หน้า">
+      <%= link_to "◁", auctions_path(tab: @tab, q: @query.presence, page: @page - 1), class: ("is-disabled" if @page <= 1) %>
+      <span><%= @page %> / <%= pages %></span>
+      <%= link_to "▷", auctions_path(tab: @tab, q: @query.presence, page: @page + 1), class: ("is-disabled" if @page >= pages) %>
+    </nav>
+  <% end %>
+<% else %>
+  <div class="empty-state">
+    <p>ยังไม่มีรายการในหมวดนี้</p>
+    <% if can?(:create_auctions) %><%= link_to "+ ลงประมูลรายการแรก", new_auction_path, class: "btn btn-small" %><% end %>
+  </div>
+<% end %>

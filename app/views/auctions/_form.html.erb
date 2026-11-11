@@ -1,0 +1,61 @@
+<%= form_with model: auction, class: "form panel" do |form| %>
+  <% if auction.errors.any? %>
+    <div class="flash flash--alert">
+      <ul class="error-list"><% auction.errors.full_messages.each do |m| %><li><%= m %></li><% end %></ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title, "ชื่อรายการ *" %>
+    <%= form.text_field :title, required: true, maxlength: 200 %>
+  </div>
+  <div class="field">
+    <%= form.label :description, "รายละเอียด" %>
+    <%= form.text_area :description, rows: 5 %>
+  </div>
+  <div class="grid">
+    <div class="field">
+      <%= form.label :starting_price, "ราคาเริ่มต้น (บาท) *" %>
+      <%= form.number_field :starting_price, min: 1, step: "any", required: true, inputmode: "decimal", disabled: auction.bids_count.positive? %>
+    </div>
+    <div class="field">
+      <%= form.label :min_increment, "ขั้นต่ำการเพิ่มราคา (บาท) *" %>
+      <%= form.number_field :min_increment, min: 1, step: "any", required: true, inputmode: "decimal" %>
+    </div>
+    <div class="field">
+      <%= form.label :starts_at, "เวลาเริ่ม *" %>
+      <%= form.datetime_local_field :starts_at, required: true %>
+    </div>
+    <div class="field">
+      <%= form.label :ends_at, "เวลาปิด *" %>
+      <%= form.datetime_local_field :ends_at, required: true %>
+    </div>
+  </div>
+
+  <div class="field upload">
+    <%= form.label :photos, "รูปภาพ (JPG/PNG/WEBP สูงสุด #{Auction::MAX_PHOTOS} รูป, 10MB ต่อรูป)" %>
+    <%= form.file_field :photos, multiple: true, accept: Auction::PHOTO_TYPES.join(",") %>
+  </div>
+
+  <% if auction.persisted? && auction.photos.attached? %>
+    <fieldset class="photo-pick">
+      <legend>เลือกรูปที่ต้องการลบ</legend>
+      <% auction.photos.each do |photo| %>
+        <label>
+          <%= check_box_tag "remove_photo_ids[]", photo.id, false, id: "remove_photo_#{photo.id}" %>
+          <%= image_tag rails_blob_path(photo, disposition: "inline"), alt: "" %>
+        </label>
+      <% end %>
+    </fieldset>
+  <% end %>
+
+  <div class="form-actions">
+    <%= link_to "ยกเลิก", auction.persisted? ? auction_path(auction) : auctions_path(tab: "mine"), class: "btn btn-ghost" %>
+    <% if auction.new_record? || auction.draft? %>
+      <%= form.submit "บันทึกร่าง", class: "btn btn-ghost" %>
+      <%= form.submit "เปิดประมูล", name: "publish", class: "btn" %>
+    <% else %>
+      <%= form.submit "บันทึก", class: "btn" %>
+    <% end %>
+  </div>
+<% end %>

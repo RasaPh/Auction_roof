@@ -1,0 +1,5 @@
+<li class="bid-row" id="<%= dom_id(bid) %>">
+  <span><%= mask_name(bid.user) %></span>
+  <strong><%= baht(bid.amount) %></strong>
+  <time datetime="<%= bid.created_at.iso8601 %>"><%= bid.created_at.in_time_zone.strftime("%H:%M:%S") %></time>
+</li>

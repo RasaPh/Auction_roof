@@ -8,6 +8,10 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   belongs_to :role, optional: true
   has_one_attached :document
+  has_many :auctions, foreign_key: :seller_id, dependent: :restrict_with_error, inverse_of: :seller
+  has_many :bids, dependent: :restrict_with_error
+  has_many :chat_messages, dependent: :destroy
+  has_many :notifications, dependent: :destroy
 
   normalizes :username, with: ->(u) { u.strip.downcase }
   normalizes :phone, with: ->(p) { p.gsub(/\D/, "") }

@@ -1,0 +1,48 @@
+<% content_for :admin_title, "รายการประมูล" %>
+
+<header class="admin-head">
+  <h1>จัดการรายการประมูล</h1>
+  <div class="admin-tools">
+    <%= form_with url: admin_auctions_path, method: :get, class: "search", role: "search", data: { controller: "autosubmit" } do |form| %>
+      <%= form.select :status, [ [ "ทุกสถานะ", "" ], [ "ร่าง", "draft" ], [ "เปิดประมูล", "published" ], [ "ปิดแล้ว", "ended" ], [ "ยกเลิก", "cancelled" ] ],
+            { selected: @status }, "aria-label": "สถานะ", data: { action: "change->autosubmit#submit" } %>
+      <%= form.search_field :q, value: @query, placeholder: "ค้นหาชื่อรายการ", "aria-label": "ค้นหารายการประมูล" %>
+    <% end %>
+    <%= link_to "+ ลงประมูล", new_auction_path, class: "btn btn-small" if can?(:create_auctions) %>
+  </div>
+</header>
+
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr><th>ID</th><th>รายการ</th><th>ผู้ขาย</th><th>สถานะ</th><th>ราคา</th><th>Bid</th><th>ปิด</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% @auctions.each do |auction| %>
+        <tr>
+          <td class="num"><%= auction.id %></td>
+          <td><%= link_to auction.title, auction %></td>
+          <td><%= auction.seller.full_name %></td>
+          <td><%= phase_badge(auction) %></td>
+          <td class="num"><%= baht(auction.price) %></td>
+          <td class="num"><%= auction.bids_count %></td>
+          <td><%= thai_datetime(auction.ends_at) %></td>
+          <td class="actions">
+            <% unless auction.ended? || auction.cancelled? %>
+              <%= link_to "แก้ไข", edit_auction_path(auction) %>
+            <% end %>
+            <% if auction.published? %>
+              <%= button_to "ปิดตอนนี้", close_admin_auction_path(auction), class: "link-danger", form: { style: "display:inline" }, data: { turbo_confirm: "ปิดประมูลตอนนี้และตัดสินผู้ชนะจากราคาสูงสุด?" } %>
+            <% end %>
+            <% unless auction.ended? || auction.cancelled? %>
+              <%= button_to "ยกเลิก", cancel_admin_auction_path(auction), class: "link-danger", form: { style: "display:inline" }, data: { turbo_confirm: "ยกเลิกรายการนี้?" } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <% if @auctions.empty? %>
+        <tr><td colspan="8" class="empty">ไม่พบรายการ</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

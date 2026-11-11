@@ -1,0 +1,54 @@
+<% content_for :admin_title, "รายงาน" %>
+<% status_labels = { "draft" => "ร่าง", "published" => "เปิดประมูล", "ended" => "ปิดแล้ว", "cancelled" => "ยกเลิก" } %>
+
+<header class="admin-head"><h1>รายงานการประมูล</h1></header>
+
+<div class="stats">
+  <div class="stat"><small>กำลังประมูล</small><strong><%= @live_count %></strong></div>
+  <div class="stat"><small>Bid ทั้งหมด</small><strong><%= number_with_delimiter(@bids_count) %></strong><small>วันนี้ <%= @bids_today %></small></div>
+  <div class="stat"><small>ผู้เสนอราคา</small><strong><%= number_with_delimiter(@bidders_count) %></strong></div>
+  <div class="stat"><small>ขายได้</small><strong><%= @sold.count %></strong><small>ไม่มีผู้ประมูล <%= @unsold_count %></small></div>
+  <div class="stat"><small>มูลค่าที่ขายได้</small><strong><%= baht(@sold_total) %></strong></div>
+</div>
+
+<div class="report-grid">
+  <section class="panel">
+    <h2 class="panel__title">จำนวนตามสถานะ</h2>
+    <dl class="detail__list">
+      <% status_labels.each do |key, label| %>
+        <dt><%= label %></dt><dd><%= @status_counts[key].to_i %></dd>
+      <% end %>
+    </dl>
+  </section>
+
+  <section class="table-wrap">
+    <table class="table">
+      <caption class="table-caption">รายการที่มีผู้เสนอราคามากที่สุด</caption>
+      <thead><tr><th>รายการ</th><th>Bid</th><th>ราคา</th></tr></thead>
+      <tbody>
+        <% @top_auctions.each do |a| %>
+          <tr><td><%= link_to a.title, a %></td><td class="num"><%= a.bids_count %></td><td class="num"><%= baht(a.price) %></td></tr>
+        <% end %>
+        <% if @top_auctions.empty? %><tr><td colspan="3" class="empty">ยังไม่มีข้อมูล</td></tr><% end %>
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<section class="table-wrap report-recent">
+  <table class="table">
+    <caption class="table-caption">ปิดประมูลล่าสุด</caption>
+    <thead><tr><th>รายการ</th><th>ผู้ชนะ</th><th>ราคาสุดท้าย</th><th>ปิดเมื่อ</th></tr></thead>
+    <tbody>
+      <% @recent_closed.each do |a| %>
+        <tr>
+          <td><%= link_to a.title, a %></td>
+          <td><%= a.winner&.full_name || "—" %></td>
+          <td class="num"><%= a.winner ? baht(a.price) : "—" %></td>
+          <td><%= thai_datetime(a.closed_at) %></td>
+        </tr>
+      <% end %>
+      <% if @recent_closed.empty? %><tr><td colspan="4" class="empty">ยังไม่มีข้อมูล</td></tr><% end %>
+    </tbody>
+  </table>
+</section>

@@ -11,6 +11,12 @@
       <% if can?(:manage_roles) %>
         <%= link_to "บทบาทและสิทธิ์", admin_roles_path, class: ("is-active" if controller_name == "roles") %>
       <% end %>
+      <% if can?(:manage_auctions) %>
+        <%= link_to "รายการประมูล", admin_auctions_path, class: ("is-active" if controller_name == "auctions") %>
+      <% end %>
+      <% if can?(:view_reports) %>
+        <%= link_to "รายงาน", admin_reports_path, class: ("is-active" if controller_name == "reports") %>
+      <% end %>
       <%= link_to "กลับหน้าหลัก", root_path %>
     </nav>
     <div class="admin-me">
