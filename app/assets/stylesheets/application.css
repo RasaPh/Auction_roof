@@ -1,42 +1,18 @@
 :root {
-  --bg: #f5f3f0;
-  --surface: #ffffff;
-  --text: #1f1d1a;
-  --muted: #6b665f;
-  --border: #d9d4cc;
-  --accent: #b4532a;
-  --accent-text: #ffffff;
+  /* Base palette (--bg, --surface, --text, --muted, --border, --primary...) lives in landing.css */
   --alert-bg: #fdecea;
   --alert-text: #9b1c1c;
   --notice-bg: #e8f5ec;
   --notice-text: #1e6b3a;
-  --radius: 10px;
-  font-family: "Sarabun", system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #171614;
-    --surface: #23211e;
-    --text: #f0ece6;
-    --muted: #a39d94;
-    --border: #3a3732;
-    --accent: #e07a4f;
-    --accent-text: #171614;
     --alert-bg: #3b1d1b;
     --alert-text: #f5b4ae;
     --notice-bg: #183025;
     --notice-text: #a6e0bb;
   }
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.5;
 }
 
 .page {
@@ -72,7 +48,7 @@ input[type="text"], input[type="password"], input[type="tel"], input[type="email
   border: 1px solid var(--border);
   border-radius: 8px;
 }
-input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+input:focus { outline: 2px solid var(--primary); outline-offset: 1px; border-color: transparent; }
 
 .upload {
   padding: 16px;
@@ -89,24 +65,19 @@ input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-colo
   padding: 0;
 }
 
-.btn {
-  justify-self: end;
-  padding: 10px 24px;
-  font: inherit;
-  font-weight: 600;
-  color: var(--accent-text);
-  background: var(--accent);
-  border: 0;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.btn:hover { filter: brightness(1.08); }
-.btn--ghost { color: var(--text); background: transparent; border: 1px solid var(--border); }
+/* Colors and shape come from .btn in landing.css; these make it work on <button>/<input> too */
+.form .btn { justify-self: end; }
+button.btn, input.btn { border: 0; font: inherit; cursor: pointer; }
+button.btn-ghost { border: 1px solid var(--border); }
+
+.nav-form { display: inline; margin: 0; }
+.nav-user { color: var(--muted); font-size: 0.9rem; }
+.landing-flash { padding-top: 16px; }
 
 .links { margin: 20px 0 0; text-align: center; color: var(--muted); }
-.links a { color: var(--accent); }
+.links a { color: var(--primary); }
 .links span { margin: 0 6px; }
-.muted { color: var(--muted); margin-top: -8px; }
+.muted { color: var(--muted); margin: -8px 0 16px; }
 
 .flash {
   max-width: 680px;

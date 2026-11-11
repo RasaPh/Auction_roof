@@ -9,6 +9,10 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <%= yield :head %>
 
     <link rel="icon" href="/icon.png" type="image/png">
@@ -20,10 +24,13 @@
   </head>
 
   <body>
-    <main class="page">
-      <% if flash[:alert] %><div class="flash flash--alert"><%= flash[:alert] %></div><% end %>
-      <% if flash[:notice] %><div class="flash flash--notice"><%= flash[:notice] %></div><% end %>
+    <% if content_for?(:full_page) %>
       <%= yield %>
-    </main>
+    <% else %>
+      <main class="page">
+        <%= render "layouts/flash" %>
+        <%= yield %>
+      </main>
+    <% end %>
   </body>
 </html>
