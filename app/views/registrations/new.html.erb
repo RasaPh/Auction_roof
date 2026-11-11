@@ -1,0 +1,54 @@
+<% content_for :title, "สมัครสมาชิก | Auction Roof" %>
+
+<div class="card card--wide">
+  <h1 class="card__title">Register</h1>
+
+  <% if @user.errors.any? %>
+    <div class="flash flash--alert">
+      <ul><% @user.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @user, url: registration_path, class: "form" do |form| %>
+    <div class="grid">
+      <div class="field">
+        <%= form.label :first_name, "ชื่อ" %>
+        <%= form.text_field :first_name, required: true, autocomplete: "given-name" %>
+      </div>
+      <div class="field">
+        <%= form.label :last_name, "นามสกุล" %>
+        <%= form.text_field :last_name, required: true, autocomplete: "family-name" %>
+      </div>
+      <div class="field">
+        <%= form.label :phone, "เบอร์โทรศัพท์" %>
+        <%= form.telephone_field :phone, required: true, autocomplete: "tel", placeholder: "0812345678", inputmode: "numeric" %>
+      </div>
+      <div class="field">
+        <%= form.label :email_address, "อีเมล (ไม่บังคับ)" %>
+        <%= form.email_field :email_address, autocomplete: "email" %>
+      </div>
+      <div class="field">
+        <%= form.label :username, "Username" %>
+        <%= form.text_field :username, required: true, autocomplete: "username" %>
+      </div>
+      <div class="field"></div>
+      <div class="field">
+        <%= form.label :password, "รหัสผ่าน (อย่างน้อย 8 ตัว)" %>
+        <%= form.password_field :password, required: true, autocomplete: "new-password", minlength: 8, maxlength: 72 %>
+      </div>
+      <div class="field">
+        <%= form.label :password_confirmation, "ยืนยันรหัสผ่าน" %>
+        <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password", maxlength: 72 %>
+      </div>
+    </div>
+
+    <div class="field upload">
+      <%= form.label :document, "อัปโหลดเอกสาร (เช่น รูปบัตรประชาชน) — JPG/PNG/PDF ไม่เกิน 10MB" %>
+      <%= form.file_field :document, accept: "image/jpeg,image/png,image/webp,application/pdf" %>
+    </div>
+
+    <%= form.submit "Submit", class: "btn" %>
+  <% end %>
+
+  <p class="links">มีบัญชีแล้ว? <%= link_to "เข้าสู่ระบบ", new_session_path %></p>
+</div>

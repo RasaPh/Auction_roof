@@ -1,0 +1,98 @@
+:root {
+  /* Base palette (--bg, --surface, --text, --muted, --border, --primary...) lives in landing.css */
+  --alert-bg: #fdecea;
+  --alert-text: #9b1c1c;
+  --notice-bg: #e8f5ec;
+  --notice-text: #1e6b3a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --alert-bg: #3b1d1b;
+    --alert-text: #f5b4ae;
+    --notice-bg: #183025;
+    --notice-text: #a6e0bb;
+  }
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 16px;
+}
+
+/* Login / register / forgot-password sit on the brand gradient */
+body.auth-bg {
+  min-height: 100vh;
+  background: var(--grad-hero);
+}
+
+.card {
+  max-width: 420px;
+  margin: 0 auto;
+  /* purple + gold stripe on top, as on PEA stationery */
+  background: var(--stripe) top / 100% 6px no-repeat, var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 34px 28px 28px;
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
+}
+.card--wide { max-width: 680px; }
+.card__title { margin: 0 0 20px; font-size: 1.75rem; color: var(--primary); }
+
+.form { display: grid; gap: 16px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; }
+@media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+.field { display: grid; gap: 6px; }
+.field label { font-size: 0.9rem; color: var(--muted); }
+
+input[type="text"], input[type="password"], input[type="tel"], input[type="email"] {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+input:focus { outline: 2px solid var(--primary); outline-offset: 1px; border-color: transparent; }
+
+.upload {
+  padding: 16px;
+  border: 1px dashed var(--pea-gold);
+  border-radius: 8px;
+}
+
+.otp { display: flex; gap: 10px; }
+.otp input {
+  width: 52px;
+  height: 56px;
+  text-align: center;
+  font-size: 1.5rem;
+  padding: 0;
+}
+
+/* Colors and shape come from .btn in landing.css; these make it work on <button>/<input> too */
+.form .btn { justify-self: end; }
+button.btn, input.btn { border: 0; font: inherit; cursor: pointer; }
+button.btn-ghost { border: 1px solid var(--border); }
+
+.nav-form { display: inline; margin: 0; }
+.nav-user { color: var(--muted); font-size: 0.9rem; }
+.landing-flash { padding-top: 16px; }
+
+.links { margin: 20px 0 0; text-align: center; color: var(--muted); }
+.links a { color: var(--primary); }
+.links span { margin: 0 6px; }
+.muted { color: var(--muted); margin: -8px 0 16px; }
+
+.flash {
+  max-width: 680px;
+  margin: 0 auto 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+.flash ul { margin: 0; padding-left: 18px; }
+.flash--alert { background: var(--alert-bg); color: var(--alert-text); }
+.flash--notice { background: var(--notice-bg); color: var(--notice-text); }

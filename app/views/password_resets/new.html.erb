@@ -1,0 +1,16 @@
+<% content_for :title, "ลืมรหัสผ่าน | Auction Roof" %>
+
+<div class="card">
+  <h1 class="card__title">Forgot password</h1>
+  <p class="muted">กรอกเบอร์โทรที่ใช้สมัคร เราจะส่งรหัส OTP 4 หลักให้</p>
+
+  <%= form_with url: password_reset_path, class: "form" do |form| %>
+    <div class="field">
+      <%= form.label :phone, "เบอร์โทรศัพท์" %>
+      <%= form.telephone_field :phone, required: true, autofocus: true, autocomplete: "tel", placeholder: "0812345678", inputmode: "numeric" %>
+    </div>
+    <%= form.submit "ขอรหัส OTP", class: "btn" %>
+  <% end %>
+
+  <p class="links"><%= link_to "กลับไปหน้าเข้าสู่ระบบ", new_session_path %></p>
+</div>
