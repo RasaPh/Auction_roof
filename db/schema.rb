@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_11_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_11_150000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -103,6 +103,51 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_140000) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
+  create_table "product_categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "position", default: 0, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_product_categories_on_name", unique: true
+  end
+
+  create_table "product_photos", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id", "position"], name: "index_product_photos_on_product_id_and_position"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.bigint "product_category_id", null: false
+    t.string "name", null: false
+    t.string "asset_code"
+    t.text "description"
+    t.string "owner_name", null: false
+    t.string "owner_phone", null: false
+    t.bigint "owner_user_id"
+    t.text "owner_note"
+    t.integer "quantity", default: 1, null: false
+    t.string "unit", default: "ชิ้น", null: false
+    t.string "condition", default: "usable", null: false
+    t.string "location_province"
+    t.decimal "appraised_price", precision: 14, scale: 2
+    t.string "status", default: "draft", null: false
+    t.bigint "created_by_id"
+    t.bigint "updated_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["asset_code"], name: "index_products_on_asset_code", unique: true, where: "(asset_code IS NOT NULL)"
+    t.index ["created_by_id"], name: "index_products_on_created_by_id"
+    t.index ["owner_user_id"], name: "index_products_on_owner_user_id"
+    t.index ["product_category_id"], name: "index_products_on_product_category_id"
+    t.index ["status"], name: "index_products_on_status"
+    t.index ["updated_by_id"], name: "index_products_on_updated_by_id"
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name", null: false
     t.json "permissions", default: [], null: false
@@ -149,6 +194,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_140000) do
   add_foreign_key "chat_messages", "users"
   add_foreign_key "notifications", "auctions"
   add_foreign_key "notifications", "users"
+  add_foreign_key "product_photos", "products"
+  add_foreign_key "products", "product_categories"
+  add_foreign_key "products", "users", column: "created_by_id"
+  add_foreign_key "products", "users", column: "owner_user_id"
+  add_foreign_key "products", "users", column: "updated_by_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "users", "roles"
 end
