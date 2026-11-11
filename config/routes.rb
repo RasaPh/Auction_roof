@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   resource :password_reset, only: %i[ new create edit update ]
 
   namespace :admin do
-    resources :users, only: %i[ index show edit update ]
+    resources :users, only: %i[ index show new create edit update ]
     resources :roles, only: %i[ index create edit update destroy ]
   end
 

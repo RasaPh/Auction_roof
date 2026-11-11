@@ -17,6 +17,22 @@ module Admin
     def show
     end
 
+    def new
+      @user = User.new
+      @roles = Role.order(:name)
+    end
+
+    def create
+      @user = User.new(create_params)
+
+      if @user.save
+        redirect_to admin_user_path(@user), notice: "สร้างผู้ใช้งาน #{@user.username} แล้ว", status: :see_other
+      else
+        @roles = Role.order(:name)
+        render :new, status: :unprocessable_entity
+      end
+    end
+
     def edit
       @roles = Role.order(:name)
     end
@@ -39,6 +55,11 @@ module Admin
 
       def user_params
         params.expect(user: [ :first_name, :last_name, :phone, :email_address, :role_id ])
+      end
+
+      def create_params
+        params.expect(user: [ :username, :first_name, :last_name, :phone, :email_address,
+                              :password, :password_confirmation, :role_id, :document ])
       end
 
       # The inline role dropdown on the list returns to the list (keeping the search); the edit form goes to the detail page.

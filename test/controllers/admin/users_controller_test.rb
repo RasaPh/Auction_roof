@@ -63,4 +63,41 @@ class Admin::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal roles(:admin), @admin.reload.role
     assert_equal "ไม่สามารถเปลี่ยนบทบาทของตัวเองได้", flash[:alert]
   end
+
+  test "new form requires manage_users" do
+    get new_admin_user_path
+    assert_redirected_to new_session_path
+
+    sign_in_as @buyer
+    get new_admin_user_path
+    assert_redirected_to root_path
+    assert_no_difference "User.count" do
+      post admin_users_path, params: { user: { username: "x" } }
+    end
+  end
+
+  test "admin creates a user with a role" do
+    sign_in_as @admin
+    get new_admin_user_path
+    assert_response :success
+
+    assert_difference "User.count", 1 do
+      post admin_users_path, params: { user: {
+        username: "Newbie", first_name: "New", last_name: "Bie", phone: "0899999999",
+        password: "secret123", password_confirmation: "secret123", role_id: roles(:buyer).id
+      } }
+    end
+    user = User.find_by!(username: "newbie")
+    assert_redirected_to admin_user_path(user)
+    assert_equal roles(:buyer), user.role
+    assert user.authenticate("secret123")
+  end
+
+  test "create with invalid data re-renders the form" do
+    sign_in_as @admin
+    assert_no_difference "User.count" do
+      post admin_users_path, params: { user: { username: "one", first_name: "A", last_name: "B", phone: "0811111111", password: "short" } }
+    end
+    assert_response :unprocessable_entity
+  end
 end
