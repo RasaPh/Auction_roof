@@ -1,2 +1,12 @@
-<h1>Auction Roof</h1>
-<p>Welcome to Auction Roof</p>
+<div class="card">
+  <h1 class="card__title">Auction Roof</h1>
+  <% if (user = Current.user) %>
+    <p>สวัสดี <strong><%= user.first_name %> <%= user.last_name %></strong> (@<%= user.username %>)</p>
+    <%= button_to "ออกจากระบบ", session_path, method: :delete, class: "btn btn--ghost" %>
+  <% else %>
+    <p>Welcome to Auction Roof</p>
+    <p class="links">
+      <%= link_to "เข้าสู่ระบบ", new_session_path %> <span>/</span> <%= link_to "สมัครสมาชิก", new_registration_path %>
+    </p>
+  <% end %>
+</div>

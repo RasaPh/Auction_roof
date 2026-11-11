@@ -1,0 +1,25 @@
+<% content_for :title, "เข้าสู่ระบบ | Auction Roof" %>
+
+<div class="card">
+  <h1 class="card__title">Login</h1>
+
+  <%= form_with url: session_path, class: "form" do |form| %>
+    <div class="field">
+      <%= form.label :username, "Username" %>
+      <%= form.text_field :username, required: true, autofocus: true, autocomplete: "username", value: params[:username] %>
+    </div>
+
+    <div class="field">
+      <%= form.label :password, "Password" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72 %>
+    </div>
+
+    <%= form.submit "เข้าสู่ระบบ", class: "btn" %>
+  <% end %>
+
+  <p class="links">
+    <%= link_to "ลืมรหัสผ่าน", new_password_reset_path %>
+    <span>/</span>
+    <%= link_to "สมัครสมาชิก", new_registration_path %>
+  </p>
+</div>
