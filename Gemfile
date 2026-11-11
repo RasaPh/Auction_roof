@@ -64,3 +64,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
 end
+
+gem "pg", "~> 1.6"
+
+gem "ruby-vips", "~> 2.3", require: false # loaded by Active Storage only when processing images
