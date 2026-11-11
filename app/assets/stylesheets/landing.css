@@ -1,29 +1,44 @@
 :root {
-  --bg: #f8fafc;
+  /* PEA Corporate Identity (Brand Bible 2022, p.17) */
+  --pea-purple: #74045F;   /* Pantone 7650 C */
+  --pea-gold: #C7911B;     /* Pantone 1245 C */
+  --pea-gold-soft: #CDB578;/* gold for text on purple (web guideline) */
+
+  --bg: #fbf8fa;
   --surface: #ffffff;
-  --surface-alt: #f1f5f9;
-  --text: #0f172a;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --primary: #4f46e5;
-  --primary-strong: #4338ca;
-  --accent: #f97316;
-  --live: #ef4444;
+  --surface-alt: #f6eef4;
+  --text: #2b0a25;
+  --muted: #6e5a68;
+  --border: #ead9e5;
+  --primary: var(--pea-purple);
+  --primary-strong: #5a034a;
+  --accent: var(--pea-gold);
+  --live: #e11d48;
   --radius: 16px;
-  --shadow: 0 20px 45px -20px rgb(15 23 42 / 0.25);
+  --shadow: 0 20px 45px -20px rgb(116 4 95 / 0.35);
+
+  /* Gradients modelled on the Brand Bible cover */
+  --grad-brand: linear-gradient(135deg, #4a0340 0%, #74045F 45%, #a3127f 100%);
+  --grad-hero:
+    radial-gradient(700px circle at 85% 20%, rgb(214 51 166 / 0.45), transparent 60%),
+    radial-gradient(600px circle at 10% 90%, rgb(93 63 211 / 0.35), transparent 60%),
+    linear-gradient(160deg, #3a0233 0%, #74045F 55%, #8e0c74 100%);
+  --grad-gold: linear-gradient(135deg, #C7911B, #e2bb62);
+  --stripe: linear-gradient(90deg, var(--pea-purple) 0 72%, var(--pea-gold) 72% 100%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0b1120;
-    --surface: #111827;
-    --surface-alt: #0f172a;
-    --text: #e5e7eb;
-    --muted: #94a3b8;
-    --border: #1f2937;
-    --primary: #818cf8;
-    --primary-strong: #6366f1;
-    --shadow: 0 20px 45px -20px rgb(0 0 0 / 0.6);
+    --bg: #160512;
+    --surface: #22091d;
+    --surface-alt: #1c0718;
+    --text: #f6eaf3;
+    --muted: #bfa8b9;
+    --border: #3f1937;
+    --primary: #c04aa5;
+    --primary-strong: #d368ba;
+    --accent: var(--pea-gold-soft);
+    --shadow: 0 20px 45px -20px rgb(0 0 0 / 0.7);
   }
 }
 
@@ -37,7 +52,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: "IBM Plex Sans Thai", system-ui, -apple-system, sans-serif;
+  font-family: "Prompt", system-ui, -apple-system, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -74,15 +89,21 @@ p {
   justify-content: center;
   padding: 0.8rem 1.4rem;
   border-radius: 999px;
-  background: var(--primary);
+  background: var(--grad-brand);
   color: #fff;
   font-weight: 600;
-  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 8px 20px -10px rgb(116 4 95 / 0.7);
+  transition: filter 0.2s, transform 0.2s;
 }
 
 .btn:hover {
-  background: var(--primary-strong);
+  filter: brightness(1.12);
   transform: translateY(-1px);
+}
+
+.btn-gold {
+  background: var(--grad-gold);
+  color: #3a0233;
 }
 
 .btn-small {
@@ -102,11 +123,11 @@ p {
 
 .btn-light {
   background: #fff;
-  color: #4338ca;
+  color: var(--pea-purple);
 }
 
 .btn-light:hover {
-  background: #eef2ff;
+  background: #fdf5e4;
 }
 
 /* Header */
@@ -116,7 +137,7 @@ p {
   z-index: 10;
   backdrop-filter: blur(12px);
   background: color-mix(in srgb, var(--bg) 80%, transparent);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--pea-gold);
 }
 
 .nav {
@@ -140,7 +161,8 @@ p {
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  background: var(--grad-brand);
+  box-shadow: inset 0 0 0 2px var(--pea-gold);
   color: #fff;
   font-size: 0.8rem;
 }
@@ -163,9 +185,27 @@ p {
 /* Hero */
 .hero {
   padding: 5rem 0 4rem;
-  background:
-    radial-gradient(600px circle at 10% 0%, color-mix(in srgb, var(--primary) 18%, transparent), transparent 60%),
-    radial-gradient(500px circle at 90% 30%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 60%);
+  background: var(--grad-hero);
+  color: #fff;
+}
+
+.hero .btn {
+  background: var(--grad-gold);
+  color: #3a0233;
+}
+
+.hero .btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgb(255 255 255 / 0.55);
+}
+
+.hero .btn-ghost:hover {
+  background: rgb(255 255 255 / 0.12);
+}
+
+.hero .auction-card {
+  color: var(--text);
 }
 
 .hero-grid {
@@ -179,8 +219,9 @@ p {
   display: inline-block;
   padding: 0.3rem 0.8rem;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--primary) 12%, transparent);
-  color: var(--primary);
+  background: rgb(255 255 255 / 0.12);
+  border: 1px solid rgb(205 181 120 / 0.6);
+  color: var(--pea-gold-soft);
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -192,11 +233,14 @@ p {
 }
 
 .accent {
-  color: var(--primary);
+  background: var(--grad-gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .lead {
-  color: var(--muted);
+  color: rgb(255 255 255 / 0.85);
   font-size: 1.15rem;
   max-width: 34rem;
 }
@@ -250,7 +294,7 @@ p {
   height: 160px;
   margin: 1rem 0;
   border-radius: var(--radius);
-  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 35%, var(--surface-alt)), color-mix(in srgb, var(--accent) 35%, var(--surface-alt)));
+  background: var(--grad-brand);
 }
 
 .auction-price {
@@ -316,6 +360,10 @@ p {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.feature {
+  border-top: 3px solid var(--pea-gold);
+}
+
 .feature:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow);
@@ -351,7 +399,8 @@ p {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: var(--primary);
+  background: var(--grad-brand);
+  box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px var(--pea-gold);
   color: #fff;
   font-weight: 700;
   font-size: 1.2rem;
@@ -363,12 +412,22 @@ p {
   text-align: center;
   padding: 3.5rem 1.5rem;
   border-radius: calc(var(--radius) + 8px);
-  background: linear-gradient(135deg, #4f46e5, #7c3aed 55%, #f97316);
+  background: var(--grad-hero);
   color: #fff;
+  position: relative;
+  overflow: hidden;
 }
 
 .cta h2 {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.cta::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 6px;
+  background: var(--stripe);
 }
 
 .cta p {
@@ -378,7 +437,8 @@ p {
 
 /* Footer */
 .site-footer {
-  border-top: 1px solid var(--border);
+  border-top: 4px solid transparent;
+  border-image: var(--stripe) 1;
   padding: 1.5rem 0;
   color: var(--muted);
   font-size: 0.9rem;
