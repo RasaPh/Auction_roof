@@ -1,0 +1,24 @@
+# Local PostgreSQL for development and test.
+#   docker compose up -d db
+# Values come from .env (copy .env.example). Port 5434 avoids clashing with
+# other Postgres instances that commonly sit on 5432.
+services:
+  db:
+    image: postgres:17
+    container_name: auction_roof_db
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "127.0.0.1:${DB_PORT:-5434}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:
