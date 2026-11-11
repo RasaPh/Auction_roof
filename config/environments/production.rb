@@ -21,8 +21,10 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
-  # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  # Railway's container disk is wiped on every deploy, so uploads must live elsewhere:
+  #   ACTIVE_STORAGE_SERVICE=s3     S3-compatible bucket (Cloudflare R2, AWS S3, ...), see config/storage.yml
+  #   ACTIVE_STORAGE_SERVICE=local  only together with a Railway Volume mounted at /rails/storage
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # config.assume_ssl = true

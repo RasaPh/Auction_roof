@@ -1,6 +1,6 @@
 admin:
   name: Admin
-  permissions: ["manage_users", "manage_roles", "create_auctions", "manage_auctions", "place_bids", "view_reports"]
+  permissions: ["manage_users", "manage_roles", "create_auctions", "manage_auctions", "place_bids", "view_reports", "manage_products"]
 
 buyer:
   name: Buyer

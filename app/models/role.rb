@@ -6,7 +6,8 @@ class Role < ApplicationRecord
     "create_auctions" => "สร้างรายการประมูล",
     "manage_auctions" => "จัดการรายการประมูลทั้งหมด",
     "place_bids"      => "เสนอราคาประมูล",
-    "view_reports"    => "ดูรายงาน"
+    "view_reports"    => "ดูรายงาน",
+    "manage_products" => "จัดการรายการสินค้า"
   }.freeze
 
   BUYER_NAME = "ผู้ซื้อ".freeze
