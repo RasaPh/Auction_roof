@@ -71,7 +71,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_11_100001) do
     t.integer "otp_attempts", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "role_id"
+    t.bigint "role_id"
     t.index ["phone"], name: "index_users_on_phone", unique: true
     t.index ["role_id"], name: "index_users_on_role_id"
     t.index ["username"], name: "index_users_on_username", unique: true
