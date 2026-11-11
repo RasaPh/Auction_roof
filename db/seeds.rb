@@ -12,3 +12,7 @@ admin = Role.find_or_create_by!(name: "ผู้ดูแลระบบ") { it.
 admin.update!(permissions: admin.permissions | %w[ manage_products ])
 Role.find_or_create_by!(name: "ผู้ขาย") { it.permissions = %w[ create_auctions place_bids ] }
 Role.find_or_create_by!(name: "ผู้ซื้อ") { it.permissions = %w[ place_bids ] }
+
+[ "หม้อแปลงไฟฟ้า", "ยานพาหนะ", "สายไฟ/เศษโลหะ", "อุปกรณ์ไฟฟ้า", "เครื่องจักร", "ครุภัณฑ์สำนักงาน" ].each_with_index do |name, i|
+  ProductCategory.find_or_create_by!(name: name) { it.position = i }
+end

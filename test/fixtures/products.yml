@@ -1,0 +1,20 @@
+transformer:
+  product_category: transformer
+  name: หม้อแปลงไฟฟ้า 50 kVA
+  asset_code: PEA-TR-00123
+  owner_name: สมศักดิ์ รักดี
+  owner_phone: "0812345678"
+  quantity: 1
+  unit: เครื่อง
+  condition: damaged
+  location_province: เชียงใหม่
+  appraised_price: 25000.00
+  status: ready
+  created_by: one
+
+pickup:
+  product_category: vehicle
+  name: รถกระบะ
+  owner_name: สมหญิง ใจดี
+  owner_phone: "0898765432"
+  status: draft

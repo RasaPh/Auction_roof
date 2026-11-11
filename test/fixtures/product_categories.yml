@@ -1,0 +1,12 @@
+transformer:
+  name: หม้อแปลงไฟฟ้า
+  position: 0
+
+vehicle:
+  name: ยานพาหนะ
+  position: 1
+
+inactive:
+  name: เลิกใช้
+  position: 2
+  active: false
