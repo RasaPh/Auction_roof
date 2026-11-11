@@ -8,6 +8,9 @@
       <% if can?(:manage_users) %>
         <%= link_to "ผู้ใช้งาน", admin_users_path, class: ("is-active" if controller_name == "users") %>
       <% end %>
+      <% if can?(:manage_products) %>
+        <%= link_to "รายการสินค้า", admin_products_path, class: ("is-active" if controller_name == "products") %>
+      <% end %>
       <% if can?(:manage_roles) %>
         <%= link_to "บทบาทและสิทธิ์", admin_roles_path, class: ("is-active" if controller_name == "roles") %>
       <% end %>

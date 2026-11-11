@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     get "reports", to: "reports#index"
     resources :users, only: %i[ index show new create edit update ]
     resources :roles, only: %i[ index create edit update destroy ]
+    resources :products, only: %i[ index ]
   end
 
   namespace :api do

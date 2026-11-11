@@ -1,0 +1,46 @@
+<% content_for :admin_title, "รายการสินค้า" %>
+
+<header class="admin-head">
+  <div>
+    <nav class="crumbs" aria-label="breadcrumb">ผู้ดูแลระบบ › รายการสินค้า</nav>
+    <h1>รายการสินค้า <small class="count">(<%= number_with_delimiter(@total_count) %> รายการ)</small></h1>
+  </div>
+  <div class="admin-tools">
+    <%# The create modal arrives in task #36 %>
+    <button type="button" class="btn btn-small" disabled title="เร็ว ๆ นี้">+ เพิ่มสินค้า</button>
+  </div>
+</header>
+
+<% if @products.empty? %>
+  <div class="panel empty-state">
+    <div class="empty-state__icon" aria-hidden="true">📦</div>
+    <h2>ยังไม่มีสินค้า</h2>
+    <p>เพิ่มสินค้ารายการแรกเพื่อเตรียมนำขึ้นประมูล</p>
+    <button type="button" class="btn" disabled title="เร็ว ๆ นี้">+ เพิ่มสินค้า</button>
+  </div>
+<% else %>
+  <ul class="product-grid">
+    <% @products.each do |product| %>
+      <li class="product-card" id="<%= dom_id(product) %>">
+        <div class="product-card__media">
+          <% if (photo = product.cover_photo)&.image&.attached? %>
+            <%= image_tag photo.image.variant(:thumb), alt: "#{product.name} รูปที่ 1", loading: "lazy" %>
+          <% else %>
+            <div class="product-card__placeholder" aria-hidden="true">ไม่มีรูป</div>
+          <% end %>
+          <% if product.photos_count.positive? %>
+            <span class="product-card__count" title="จำนวนรูป">📷 <%= product.photos_count %></span>
+          <% end %>
+          <%# Edit modal arrives in task #36 %>
+          <button type="button" class="product-card__edit" disabled title="แก้ไข (เร็ว ๆ นี้)" aria-label="แก้ไข <%= product.name %>">✎</button>
+        </div>
+        <div class="product-card__body">
+          <h2 class="product-card__name"><%= product.name %></h2>
+          <span class="sub"><%= product.product_category.name %></span>
+          <% if product.asset_code %><span class="sub product-card__code"><%= product.asset_code %></span><% end %>
+          <span class="pill status status--<%= product.status %>"><%= product.status_label %></span>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
