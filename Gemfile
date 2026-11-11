@@ -2,10 +2,10 @@ source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.4"
+# Use PostgreSQL as the database for Active Record
+gem "pg", "~> 1.6"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
-# Use sqlite3 as the database for Active Record
-gem "sqlite3", ">= 2.1"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
@@ -41,6 +41,9 @@ gem "thruster", require: false
 gem "image_processing", "~> 2.2"
 
 group :development, :test do
+  # Load DB settings from .env
+  gem "dotenv-rails"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
 
@@ -65,6 +68,5 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "pg", "~> 1.6"
 
 gem "ruby-vips", "~> 2.3", require: false # loaded by Active Storage only when processing images
